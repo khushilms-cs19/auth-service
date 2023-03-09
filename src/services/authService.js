@@ -1,33 +1,34 @@
 const passUtil = require('../util/passwordUtil');
 const jwtUtil = require('../util/jwtUtil');
-const db = require('../database/models/index');
+const db = require('../../database/models');
 const HttpError = require('../util/errors/httpError');
 const { UniqueConstraintError } = require('sequelize');
 const redisUtil = require('../util/redis/redisUtil');
-const createUser = async (username, password) => {
+const createUser = async (email, password) => {
   try {
     const hashedPassword = await passUtil.generateHashPassword(password);
     const userData = await db.user.create({
-      username,
+      email,
       password: hashedPassword
     });
     delete userData.dataValues.password;
     return userData;
   } catch (error) {
+    console.log(error);
     if (error instanceof UniqueConstraintError) {
-      throw new HttpError(400, 'Username already exists');
+      throw new HttpError(400, 'email already exists');
     }
     throw new HttpError(500, 'Internal Server Error');
   }
 };
 
-const login = async (username, password) => {
+const login = async (email, password) => {
   const userFound = await db.user.findOne({
     where: {
-      username
+      email
     }
   });
-  if (!userFound) { throw new HttpError(401, 'Invalid Username'); }
+  if (!userFound) { throw new HttpError(401, 'Invalid email'); }
   const userData = userFound.dataValues;
   const userIsValid = await passUtil.verifyPassword(password, userData.password);
   if (!userIsValid) { throw new HttpError(401, 'Wrong Password'); }

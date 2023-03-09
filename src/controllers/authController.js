@@ -11,18 +11,19 @@ const catchBlockHandler = (error, response) => {
 
 const createUser = async (request, response) => {
   try {
-    const { username, password } = request.body;
-    const user = await authService.createUser(username, password);
+    const { email, password } = request.body;
+    const user = await authService.createUser(email, password);
     response.status(201).json({ message: 'Success', data: { user } });
   } catch (error) {
+    console.log(error);
     catchBlockHandler(error, response);
   }
 };
 
 const login = async (request, response) => {
   try {
-    const { username, password } = request.body;
-    const token = await authService.login(username, password);
+    const { email, password } = request.body;
+    const token = await authService.login(email, password);
     response.status(200).json({ message: 'Success', data: { token } });
   } catch (error) {
     catchBlockHandler(error, response);

@@ -1,0 +1,15 @@
+FROM alpine:latest
+
+RUN apk add --update nodejs npm
+
+COPY ./database src/database
+COPY ./.sequelizerc src/.sequelizerc
+COPY package.json src/package.json
+COPY package-lock.json src/package-lock.json
+
+WORKDIR /src
+
+
+RUN npm install sequelize 
+
+ENTRYPOINT [ "npm", "run", "migrate" ] 

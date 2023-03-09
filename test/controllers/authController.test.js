@@ -4,7 +4,7 @@ const authServices = require('../../src/services/authService');
 const HttpError = require('../../src/util/errors/httpError');
 
 const mockBody = {
-  username: 'khushil',
+  email: 'khushil',
   password: '123456',
 };
 
@@ -19,7 +19,7 @@ const mockResponse = {
 
 const mockUser = {
   "id": 4,
-  "username": "khushil2",
+  "email": "khushil2",
   "updatedAt": "2023-03-08T15:21:25.073Z",
   "createdAt": "2023-03-08T15:21:25.073Z"
 }
@@ -42,10 +42,10 @@ describe('Auth Controller', () => {
       expect(mockResponse.json).toBeCalledWith({ message: 'Internal Server Error' });
     });
     it('should throw user already exist error', async () => {
-      jest.spyOn(authServices, 'createUser').mockRejectedValue(new HttpError(400, 'Username already exists'));
+      jest.spyOn(authServices, 'createUser').mockRejectedValue(new HttpError(400, 'email already exists'));
       await authControllers.createUser(mockRequest, mockResponse);
       expect(mockResponse.status).toBeCalledWith(400);
-      expect(mockResponse.json).toBeCalledWith({ message: 'Username already exists' });
+      expect(mockResponse.json).toBeCalledWith({ message: 'email already exists' });
     });
   });
   describe('login controller', () => {
@@ -67,10 +67,10 @@ describe('Auth Controller', () => {
       expect(mockResponse.json).toBeCalledWith({ message: 'Internal Server Error' });
     });
     it('should throw user not found error', async () => {
-      jest.spyOn(authServices, 'login').mockRejectedValue(new HttpError(401, 'Invalid Username'));
+      jest.spyOn(authServices, 'login').mockRejectedValue(new HttpError(401, 'Invalid email'));
       await authControllers.login(mockRequest, mockResponse);
       expect(mockResponse.status).toBeCalledWith(400);
-      expect(mockResponse.json).toBeCalledWith({ message: 'Invalid Username' });
+      expect(mockResponse.json).toBeCalledWith({ message: 'Invalid email' });
     });
     it('should throw invalid password error', async () => {
       jest.spyOn(authServices, 'login').mockRejectedValue(new HttpError(401, 'Wrong Password'));
