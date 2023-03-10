@@ -4,7 +4,7 @@ const HASH = process.env.HASH || 'SUPERSECRET';
 
 const generateJWTToken = ({ id, email }) => {
   const payload = {
-    id,
+    userId: id,
     email
   };
   const token = jwt.sign(payload, HASH, {
