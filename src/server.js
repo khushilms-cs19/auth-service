@@ -1,8 +1,10 @@
 const express = require('express');
 const { client } = require('./util/redis/redis');
 const cors = require('cors');
+require('dotenv').config();
 // Routers
 const authRouter = require('./routes/authRoutes');
+
 
 
 //redis connect
